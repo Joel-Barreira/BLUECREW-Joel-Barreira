@@ -1,0 +1,12 @@
+# Ignorar compilados de Java
+target/
+*.jar
+*.war
+
+# Ignorar dependencias de React
+node_modules/
+npm-debug.log
+
+# Ignorar archivos del sistema y entorno
+.env
+.DS_Store

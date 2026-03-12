@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: 
+      context: ./Backend-Spring-Boot/Bluecrew-api/api
+    container_name: spring-api
+    ports:
+      - "8080:8080"  # <-- IMPORTANTE: Ahora el Backend es accesible en el 8080
+    networks:
+      - app-network
+
+  frontend:
+    build: ./Frontend-React
+    container_name: react-web
+    ports:
+      - "80:80"      # <-- El Frontend (Nginx) normalmente usa el puerto 80
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
