@@ -13,7 +13,6 @@ export default function SearchField({ onLocationFound }) {
             showMarker: false,
             autoClose: true,
             keepResult: true,
-            searchLabel: 'Busca una dirección...',
         });
 
         map.addControl(searchControl);
