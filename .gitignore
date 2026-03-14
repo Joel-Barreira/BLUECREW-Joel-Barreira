@@ -10,3 +10,4 @@ npm-debug.log
 # Ignorar archivos del sistema y entorno
 .env
 .DS_Store
+.vscode
