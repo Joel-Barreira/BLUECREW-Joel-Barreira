@@ -28,7 +28,7 @@ export default function UserProfile() {
   useEffect(() => {
     const obtenerDatosDelUsuario = async () => {
       try {
-        const userId = localStorage.getItem("usuarioId") || 1;
+        const userId = localStorage.getItem("usuarioId");
 
         const response = await fetch(
   `/api/usuarios/${userId}`,

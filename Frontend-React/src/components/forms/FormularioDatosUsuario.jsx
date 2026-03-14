@@ -23,7 +23,7 @@ export default function Formulario_Datos_Usuario({ datosActuales, onCancelar, on
     
     const handleSubmit = async (e) => {
         e.preventDefault(); 
-        const userId = 1; 
+        const userId = localStorage.getItem("usuarioId"); 
 
         try {
            
