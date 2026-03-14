@@ -31,13 +31,13 @@ export default function UserProfile() {
         const userId = localStorage.getItem("usuarioId") || 1;
 
         const response = await fetch(
-          `/api/usuarios/${userId}`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-          },
-        );
+  `/api/usuarios/${userId}`, 
+  {
+    method: "GET",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  },
+);
 
         if (response.ok) {
           const datosReales = await response.json();
