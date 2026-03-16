@@ -33,11 +33,23 @@ export default function Participaciones() {
     }
   }, [id]);
   return (
-    <div className="flex-grow-1 mt-5">
-      <div className="text-center">
-        <p className="text-secondary h2">PENDIENTES DE CALIFICAR</p>
+    // <div className="flex-grow-1 mt-5">
+    //   <div className="text-center">
+    //     <p className="text-secondary h2">PENDIENTES DE CALIFICAR</p>
+    //   </div>
+    //   <GrupoDeCardEventoSmall datos={eventos} ruta="/participaciones/calificar-evento" />
+    // </div>
+     <div className="flex-grow-1 mt-5">
+    <section className="mb-5">
+      <div className="text-center mb-4">
+        <p className="text-secondary h2 fw-bold">PENDIENTES DE CALIFICAR</p>
+        <hr className="w-25 mx-auto" />
       </div>
-      <GrupoDeCardEventoSmall datos={eventos} ruta="/participaciones/calificar-evento" />
+      <GrupoDeCardEventoSmall
+        datos={eventos}
+        ruta="/participaciones/calificar-evento"
+      />
+    </section>
     </div>
   );
 }
