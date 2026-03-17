@@ -1,10 +1,10 @@
 package com.bluecrew.api.controller;
 
+import com.bluecrew.api.model.EstadoEvento;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 import com.bluecrew.api.model.Evento;
 import com.bluecrew.api.service.EventoService;
@@ -116,48 +121,76 @@ public class EventoController {
     @Operation(summary = "Crea un evento", description = "Inserta un evento en la base de datos")
     @PostMapping("/eventos")
     public ResponseEntity<Map<String, Object>> create(
-            @Valid @RequestBody Evento evento) {
-        ResponseEntity<Map<String, Object>> response;
+            @RequestPart("evento") Evento evento,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen) {
+
         if (evento == null) {
             Map<String, Object> map = new HashMap<>();
             map.put("error", "El cuerpo de la solicitud no puede estar vacío");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
 
-            response = ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(map);
         } else {
             if (evento.getTitulo() == null || evento.getTitulo().isEmpty()) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("error", "El título del evento es obligatorio");
-
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
 
-            } else if (evento.getUsuario() == null && evento.getOrganizacion() == null) {
+            }
+            if (evento.getUsuario() == null && evento.getOrganizacion() == null) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("error", "El evento debe estar asociado a un usuario o a una organización");
-
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
 
-            } else {
-                System.out.println(evento);
-                Evento objPost = eventoService.save(evento);
-                Map<String, Object> map = new HashMap<>();
-                map.put("mensaje", "Evento creado con éxito");
-                map.put("insertRealizado", objPost);
-                response = ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body(map);
             }
+            if (imagen != null && !imagen.isEmpty()) {
+                try {
+                    String uploadDir = "uploads/";
+                    Path uploadPath = Paths.get(uploadDir);
+
+                    // Si no existe la carpeta, la creamos
+                    if (!Files.exists(uploadPath)) {
+                        Files.createDirectories(uploadPath);
+                    }
+
+                    // Obtenemos el nombre original y lo guardamos tal cual
+                    String originalFilename = imagen.getOriginalFilename();
+                    Path filePath = uploadPath.resolve(originalFilename);
+                    Files.write(filePath, imagen.getBytes());
+
+                    // Actualizamos el objeto evento con el nombre de la imagen para la BD
+                    evento.setImagen(originalFilename);
+
+                } catch (IOException e) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("error", "No se pudo guardar la imagen: " + e.getMessage());
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
+                }
+            }
+
+            if (evento.getEstadoEvento() == null) {
+                evento.setEstadoEvento(EstadoEvento.PENDIENTE);
+            }
+            if (evento.getFinalizado() == null) {
+                evento.setFinalizado(false);
+            }
+
+            Evento objPost = eventoService.save(evento);
+            Map<String, Object> map = new HashMap<>();
+            map.put("mensaje", "Evento creado con éxito");
+            map.put("insertRealizado", objPost);
+            return ResponseEntity.status(HttpStatus.CREATED).body(map);
         }
-        return response;
     }
 
     // ***************************************************************************
     // ACTUALIZAR (PUT)
     // ***************************************************************************
     @Operation(summary = "Actualizar un evento", description = "Actualiza los datos de un evento existente usando su ID")
-    @PutMapping("/eventos/{id}")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable int id, @RequestBody Evento eventoActualizado) {
+    @PutMapping(value="/eventos/{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<Map<String, Object>> update(
+            @PathVariable int id,
+            @RequestPart(value = "evento", required = false) Evento eventoActualizado,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen) {
 
         if (eventoActualizado == null) {
             Map<String, Object> map = new HashMap<>();
@@ -172,6 +205,27 @@ public class EventoController {
             map.put("error", "Evento no encontrado");
             map.put("id", id);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+        }
+
+        // Lógica para guardar la nueva imagen si se proporciona una
+        if (imagen != null && !imagen.isEmpty()) {
+            try {
+                String uploadDir = "uploads/";
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                String originalFilename = imagen.getOriginalFilename();
+                Path filePath = uploadPath.resolve(originalFilename);
+                Files.write(filePath, imagen.getBytes());
+
+                existingEvento.setImagen(originalFilename);
+            } catch (IOException e) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("error", "No se pudo guardar la nueva imagen: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
+            }
         }
 
         // Actualizamos solo los campos que vengan en el JSON (que no sean nulos)
