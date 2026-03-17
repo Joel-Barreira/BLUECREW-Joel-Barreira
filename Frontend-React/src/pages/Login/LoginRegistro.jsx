@@ -9,7 +9,8 @@ export default function Login() {
   const [registrado, setRegistrado] = useState(false);
   const [tipoUsuario, setTipoUsuario] = useState("voluntario");
   const [validado, setValidado] = useState(false);
-  const [errorServidor, setErrorServidor] = useState("");
+  const [error, setError] = useState("");
+  const [exito, setExito] = useState("");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,17 +30,18 @@ export default function Login() {
   const toggleForm = () => {
     setRegistrado((prev) => !prev);
     setValidado(false);
-    setErrorServidor("");
+    setError("");
+    setExito("");
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
-    setErrorServidor("");
+    setError("");
 
     if (form.checkValidity() === false) {
       e.stopPropagation();
-      setValidado(true);
+      setValidated(true);
       return;
     }
 
@@ -61,23 +63,25 @@ export default function Login() {
 
         if (tipoUsuario === "voluntario") {
           localStorage.setItem("usuarioId", data.id);
+          localStorage.setItem("user", JSON.stringify(data));
         } else {
           const idCorrecto = data.idOrganizacion || data.id_organizacion || data.id;
           localStorage.setItem("ongId", idCorrecto);
         }
         window.location.href = "/";
       } else {
-        setErrorServidor(data.message || "Credenciales incorrectas");
+        setError(data.message || "Credenciales incorrectas");
       }
-    } catch (error) {
-      setErrorServidor("Error de conexión con el servidor");
+    } catch (err) {
+      setError("No hay conexión con el servidor");
     }
   };
 
   const handleRegistro = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
-    setErrorServidor("");
+    setError("");
+    setExito("");
 
     if (form.checkValidity() === false) {
       e.stopPropagation();
@@ -86,8 +90,7 @@ export default function Login() {
     }
 
     const urlRegistro = tipoUsuario === "voluntario" ? `/api/auth/register` : `/api/organizaciones/register`;
-
-    const bodyData = tipoUsuario === "voluntario" 
+    const bodyData = tipoUsuario === "voluntario"
       ? { nombre: regNombre, apellido: regApellido, email: regEmail, password_hash: regPassword }
       : { nombreOrganizacion: regNombreOrg, email: regEmail, passwordHash: regPassword, telefono: regTelefono, sitioWeb: regSitioWeb, descripcion: regDescripcion };
 
@@ -99,29 +102,37 @@ export default function Login() {
         credentials: "include",
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-       
+        setExito("¡Registro completado! Revisa tu correo.");
+        
         emailjs.send("service_jde23sl", "template_thpbvke", {
           to_name: tipoUsuario === "voluntario" ? regNombre : regNombreOrg,
           user_email: regEmail,
           company_name: "Blue Crew",
-        }, "XRltpFrVtfWnjbjMO");
+        }, "XRltpFrVtfWnjbjMO").catch(() => {});
 
-        setRegistrado(false);
-        setValidado(false);
-       
+        setTimeout(() => {
+          setRegistrado(false);
+          setValidado(false);
+        }, 2500);
       } else {
-        const data = await response.json();
-        setErrorServidor(data.error || data.message || "Error al registrar");
+        const rawError = data.error || data.message || "";
+        if (rawError.includes("Unique index") || rawError.includes("23505")) {
+          setError("Este correo electrónico ya está registrado.");
+        } else {
+          setError("Error al procesar el registro.");
+        }
       }
-    } catch (error) {
-      setErrorServidor("No se pudo conectar con el servidor");
+    } catch (err) {
+      setError("Fallo en la conexión");
     }
   };
 
   return (
     <div className="login-page-wrapper">
-      <Link to="/" className="boton volver-inicio ">
+      <Link to="/" className="boton volver-inicio">
         <Home size={24} />
         <span>Inicio</span>
       </Link>
@@ -130,7 +141,6 @@ export default function Login() {
 
       <div className="login principal mt-4">
         <div className={`login container ${registrado ? "active" : ""}`} id="container">
-          
           <div className="panel panel-izquierdo">
             <h2>{registrado ? "Bienvenido" : "Crea tu cuenta"}</h2>
             <p>{registrado ? "Inicia sesión para continuar" : "Únete a nuestra comunidad"}</p>
@@ -138,15 +148,14 @@ export default function Login() {
           </div>
 
           <div className="panel panel-derecho">
-            
             <form className={`form login needs-validation ${validado ? 'was-validated' : ''}`} noValidate onSubmit={handleLogin}>
               <h2>LOGIN</h2>
-              <div className="botones-tipo-usuario">
+              <div className="botones-tipo-usuario mb-3">
                 <button type="button" className={tipoUsuario === "voluntario" ? "activa" : ""} onClick={() => setTipoUsuario("voluntario")}>Voluntario</button>
                 <button type="button" className={tipoUsuario === "ong" ? "activa" : ""} onClick={() => setTipoUsuario("ong")}>ONG</button>
               </div>
 
-              {errorServidor && <div className="text-danger small mb-2">{errorServidor}</div>}
+              {error && <div className="alert alert-danger py-2 w-100" style={{ fontSize: '14px' }}>{error}</div>}
 
               <div className="w-100">
                 <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -161,15 +170,15 @@ export default function Login() {
               <button type="submit" className="btn-submit">Iniciar Sesión</button>
             </form>
 
-           
             <form className={`form registro needs-validation ${validado ? 'was-validated' : ''}`} noValidate onSubmit={handleRegistro}>
               <h2>REGISTRO</h2>
-              <div className="botones-tipo-usuario">
+              <div className="botones-tipo-usuario mb-3">
                 <button type="button" className={tipoUsuario === "voluntario" ? "activa" : ""} onClick={() => setTipoUsuario("voluntario")}>Voluntario</button>
                 <button type="button" className={tipoUsuario === "ong" ? "activa" : ""} onClick={() => setTipoUsuario("ong")}>ONG</button>
               </div>
 
-              {errorServidor && <div className="text-danger small mb-2">{errorServidor}</div>}
+              {error && <div className="alert alert-danger py-2 w-100" style={{ fontSize: '14px' }}>{error}</div>}
+              {exito && <div className="alert alert-success py-2 w-100" style={{ fontSize: '14px' }}>{exito}</div>}
 
               {tipoUsuario === "voluntario" ? (
                 <>
@@ -185,18 +194,21 @@ export default function Login() {
               ) : (
                 <>
                   <div className="w-100">
-                    <input type="text" placeholder="Nombre ONG" value={regNombreOrg} onChange={(e) => setRegNombreOrg(e.target.value)} required />
-                    <div className="invalid-feedback text-start ms-2">Nombre de la organización requerido.</div>
+                    <input type="text" placeholder="Nombre Organización" value={regNombreOrg} onChange={(e) => setRegNombreOrg(e.target.value)} required />
+                    <div className="invalid-feedback text-start ms-2">Nombre requerido.</div>
                   </div>
                   <div className="w-100">
                     <input type="text" placeholder="Teléfono" value={regTelefono} onChange={(e) => setRegTelefono(e.target.value)} required />
                     <div className="invalid-feedback text-start ms-2">Teléfono requerido.</div>
                   </div>
+                  <div className="w-100">
+                    <input type="url" placeholder="Sitio Web" value={regSitioWeb} onChange={(e) => setRegSitioWeb(e.target.value)} />
+                  </div>
                 </>
               )}
 
               <div className="w-100">
-                <input type="email" placeholder="Email corporativo" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} required />
+                <input type="email" placeholder="Email" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} required />
                 <div className="invalid-feedback text-start ms-2">Email inválido.</div>
               </div>
 
