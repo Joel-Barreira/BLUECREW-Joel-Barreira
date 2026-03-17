@@ -49,6 +49,7 @@ export default function Formulario_Evento() {
     lng: -3.7037
   });
 
+  const [imagen, setImagen] = useState(null);
   const [categorias, setCategorias] = useState([]);
 
   useEffect(() => {
@@ -127,9 +128,23 @@ export default function Formulario_Evento() {
         }
       };
 
-      console.log("Enviando JSON al backend:", eventoPayload);
+      // Uso de FormData para empaquetar los datos y la imagen
+      const formDataToSend = new FormData();
 
-      const response = await clienteAxios.post('/eventos', eventoPayload);
+      // Añadimos los datos del evento como un Blob de tipo JSON
+      formDataToSend.append(
+        "evento",
+        new Blob([JSON.stringify(eventoPayload)], { type: "application/json" })
+      );
+
+      // Si el usuario seleccionó una imagen, la adjuntamos
+      if (imagen) {
+        formDataToSend.append("imagen", imagen);
+      }
+
+      console.log("Enviando JSON al backend:", formDataToSend);
+
+      const response = await clienteAxios.post('/eventos', formDataToSend);
 
       if (response.status === 201) {
         alert("¡Evento creado con éxito!");
@@ -147,6 +162,8 @@ export default function Formulario_Evento() {
           lng: -3.7037
         });
 
+        setImagen(null); // Limpiamos la imagen
+        document.getElementById("imagenEvento").value = "";
         form.classList.remove('was-validated');
       }
 
@@ -173,7 +190,10 @@ export default function Formulario_Evento() {
 
                 <div className="mb-3">
                   <label htmlFor="imagenEvento" className="form-label fw-bold text-secondary">Imagen:</label>
-                  <input type="file" className="form-control bg-white" id="imagenEvento" accept="image/*" />
+                  <input type="file" className="form-control bg-white" id="imagenEvento" accept="image/*" onChange={(e) => {
+                    console.log("Archivo seleccionado:", e.target.files[0]);
+                    setImagen(e.target.files[0]);
+                  }} />
                 </div>
 
                 <div className="mb-4">
