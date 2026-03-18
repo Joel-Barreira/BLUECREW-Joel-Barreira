@@ -117,7 +117,7 @@ VALUES
     (5, 1, NULL, 'Fondo de Tabarca', 'Buceo basura', 'buceo.jpg', '2026-08-10 08:00', '2026-08-10 12:00', 'Tabarca', 'APROBADO', 15, FALSE, 'Equipo buceo'),
     (6, 4, NULL, 'Microplásticos Gandía', 'Estudio arena', 'microplasticos.jpg', '2026-06-20 10:00', '2026-06-20 13:00', 'Gandía', 'APROBADO', 30, FALSE, 'Pinzas'),
     (10, 5, NULL, 'Siembra Posidonia', 'Restauración', 'posidonia.jpg', '2026-09-01 09:00', '2026-09-01 15:00', 'Denia', 'APROBADO', 10, FALSE, 'Neopreno'),
-    (13, 2, NULL, 'Vigilia Tortugas', 'Noche de nidos', 'vigilia-tortuga.jpg', '2026-07-20 22:00', '2026-07-21 06:00', 'Jávea', 'APROBADO', 8, FALSE, 'Linterna roja'),
+    (13, 3, NULL, 'Vigilia Tortugas', 'Noche de nidos', 'vigilia-tortuga.jpg', '2026-07-20 22:00', '2026-07-21 06:00', 'Jávea', 'APROBADO', 8, FALSE, 'Linterna roja'),
     (17, 3, NULL, 'Kayak vs Plástico', 'Ruta por acantilados', 'kayak.jpg', '2026-06-15 10:00', '2026-06-15 13:00', 'Calpe', 'APROBADO', 20, FALSE, 'Kayak'),
     (1, 1, NULL, 'Playa Malvarrosa', 'Gran recogida', 'recogida.jpg', '2026-05-10 09:00', '2026-05-10 13:00', 'Valencia', 'APROBADO', 200, FALSE, 'Guantes'),
     (8, 5, NULL, 'Charla Escolar Mar', 'Concienciación', 'corales.jpg', '2026-04-12 11:00', '2026-04-12 13:00', 'Altea', 'APROBADO', 40, FALSE, 'Ganas'),
@@ -126,7 +126,7 @@ VALUES
     (5, 3, NULL, 'Puerto de Campomanes', 'Retirada redes', 'retirada-redes.jpg', '2026-09-10 08:30', '2026-09-10 12:00', 'Altea', 'APROBADO', 12, FALSE, 'Cuchillo buzo'),
     (14, 1, NULL, 'Adiós Carpobrotus', 'Especie invasora', 'carpobrotus.jpg', '2026-05-30 09:00', '2026-05-30 13:00', 'Alicante', 'APROBADO', 25, FALSE, 'Azada'),
     (20, 5, NULL, 'Redes Fantasma', 'Limpieza profunda', 'redes-fantasma.jpg', '2026-10-02 08:00', '2026-10-02 14:00', 'Benidorm', 'APROBADO', 10, FALSE, 'Globo elevador'),
-    (7, 2, NULL, 'Dunas de Guardamar', 'Vallado protector', 'dunas.jpg', '2026-04-15 09:00', '2026-04-15 14:00', 'Guardamar', 'APROBADO', 15, FALSE, 'Martillo'),
+    (7, 3, NULL, 'Dunas de Guardamar', 'Vallado protector', 'dunas.jpg', '2026-04-15 09:00', '2026-04-15 14:00', 'Guardamar', 'APROBADO', 15, FALSE, 'Martillo'),
     (9, 6, NULL, 'Censo Aves Marinas', 'Observación', 'censo-aves.jpg', '2026-11-05 08:00', '2026-11-05 11:00', 'Santa Pola', 'APROBADO', 10, FALSE, 'Prismáticos'),
     (11, 7, NULL, 'Arte con Plástico', 'Taller playa', 'arte-plastico.jpg', '2026-06-25 18:00', '2026-06-25 20:30', 'Villajoyosa', 'APROBADO', 20, FALSE, 'Pegamento'),
     (12, 1, NULL, 'Test Nitratos Mar', 'Análisis agua', 'plastico-peces.jpg', '2026-07-02 10:00', '2026-07-02 12:00', 'Torrevieja', 'APROBADO', 5, FALSE, 'Tubos ensayo'),
@@ -138,7 +138,7 @@ VALUES
     (1, 1, NULL, 'Playa San Juan', 'Limpieza colillas', 'colillas.jpg', '2026-06-05 18:00', '2026-06-05 21:00', 'Alicante', 'APROBADO', 60, FALSE, 'Cribas'),
     (25, 9, NULL, 'Cocina con Algas', 'Sostenibilidad', 'algas.jpg', '2026-11-10 11:00', '2026-11-10 14:00', 'Dénia', 'APROBADO', 12, FALSE, 'Delantal'),
     (22, 1, NULL, 'Senderismo Costero', 'Ruta Faro Albir', 'senderismo.jpg', '2026-03-20 09:00', '2026-03-20 12:00', 'Alfaz', 'APROBADO', 25, FALSE, 'Botas'),
-    (1, 2, NULL, 'Cala del Moraig', 'Limpieza vertical', 'cala-moraig.jpg', '2026-08-01 08:30', '2026-08-01 13:00', 'Benitachell', 'APROBADO', 10, FALSE, 'Arnés'),
+    (1, 3, NULL, 'Cala del Moraig', 'Limpieza vertical', 'cala-moraig.jpg', '2026-08-01 08:30', '2026-08-01 13:00', 'Benitachell', 'APROBADO', 10, FALSE, 'Arnés'),
     (3, 4, NULL, 'Desembocadura Ebro', 'Retirada plásticos', 'ebro.jpg', '2026-10-10 09:00', '2026-10-10 15:00', 'Deltebre', 'APROBADO', 80, FALSE, 'Sacos'),
     (15, 5, NULL, 'Arrecife Biorock', 'Instalación', 'arrecife.jpg', '2026-11-20 08:00', '2026-11-20 16:00', 'Calpe', 'APROBADO', 6, TRUE, 'Equipamiento');
 
