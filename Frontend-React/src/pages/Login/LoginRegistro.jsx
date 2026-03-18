@@ -57,6 +57,7 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.clear();
         localStorage.setItem("email", email);
         localStorage.setItem("isLogged", "true");
         localStorage.setItem("rol", tipoUsuario === "voluntario" ? "USER" : "ONG");
