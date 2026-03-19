@@ -242,14 +242,14 @@
 
 @media (max-width: 768px) {
   .boton.volver-inicio {
-    top: 20px !important;
+    top: 15px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
 
-    padding: 6px 15px !important;
+    padding: 5px 10px !important;
     z-index: 200 !important;
     span {
-      font-size: 0.8rem !important;
+      font-size: 0.9rem !important;
     }
   }
 
