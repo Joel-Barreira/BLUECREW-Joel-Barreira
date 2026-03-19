@@ -11,7 +11,7 @@ export default function CrearEventoModal({ open, setOpenModal, mensaje, ruta}) {
     };
     return (
         <div className="modal-overlay shadow" onClick={handleOverlayClick}>
-            <div className="bg-white shadow w-25 border rounded p-3">
+            <div className="bg-white shadow w-75 w-md-50 w-lg-25 border rounded p-3">
                 <p className="text-primary text-center">{mensaje}
                 </p>
                 <button className="btn btn-primary text-light fw-bold w-100" onClick={() => navigate(ruta)}>
