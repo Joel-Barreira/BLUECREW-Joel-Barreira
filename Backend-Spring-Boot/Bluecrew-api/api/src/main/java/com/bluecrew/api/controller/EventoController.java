@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -288,6 +290,38 @@ public class EventoController {
             map.put("mensaje", "Evento eliminado con éxito");
             map.put("deletedRealizado", existingObj);
             return ResponseEntity.status(HttpStatus.OK).body(map);
+        }
+    }
+
+    // ***************************************************************************
+    // CAMBIAR ESTADO (PATCH)
+    // ***************************************************************************
+    @Operation(summary = "Cambiar estado de un evento", description = "Cambia el estadoEvento (PENDIENTE/APROBADO/RECHAZADO/CANCELADO/BORRADOR)")
+    @PatchMapping("/eventos/{id}/estado")
+    public ResponseEntity<Map<String, Object>> updateEstado(
+            @PathVariable int id,
+            @RequestParam String estado) {
+
+        Evento existingObj = eventoService.findById(id);
+        if (existingObj == null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("error", "Evento no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+        }
+
+        try {
+            EstadoEvento nuevoEstado = EstadoEvento.valueOf(estado.toUpperCase());
+            existingObj.setEstadoEvento(nuevoEstado);
+            eventoService.save(existingObj);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("mensaje", "Estado del evento actualizado con éxito");
+            map.put("nuevoEstado", nuevoEstado);
+            return ResponseEntity.status(HttpStatus.OK).body(map);
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("error", "Estado no válido. Valores permitidos: PENDIENTE, APROBADO, RECHAZADO, CANCELADO, BORRADOR");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
         }
     }
 

@@ -59,8 +59,8 @@ public class Evento implements Serializable {
     private String titulo;
 
     @Schema(description = "Descripción de la noticia", example = "Descripción de la noticia")
-    @Size(min = 1, max = 500, message = "La descripción no puede tener más de 500 caracteres")
-    @Column(name = "descripcion", nullable = true, unique = false)
+    @Size(min = 1, max = 3000, message = "La descripción no puede tener más de 3000 caracteres")
+    @Column(name = "descripcion", nullable = true, unique = false, length = 3000)
     private String descripcion;
 
     @Schema(description = "Imagen de la noticia", example = "https://img.com/noticias.jpg")

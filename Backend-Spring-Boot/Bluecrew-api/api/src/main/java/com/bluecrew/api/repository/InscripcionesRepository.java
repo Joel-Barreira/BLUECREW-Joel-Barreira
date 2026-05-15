@@ -3,6 +3,8 @@ package com.bluecrew.api.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -48,4 +50,14 @@ public interface InscripcionesRepository extends JpaRepository<Inscripciones, In
         @Query(value = "SELECT FORMATDATETIME(fecha_Inscripcion, 'dd-MM-yyyy'), COUNT(*) FROM Inscripciones GROUP BY CAST(fecha_Inscripcion AS date) "
                         + "ORDER BY FORMATDATETIME(fecha_Inscripcion, 'dd-MM-yyyy') DESC", nativeQuery = true)
         List<Object[]> countInscripcionesPorDia();
+
+        @Modifying
+        @Transactional
+        @Query(value = "DELETE FROM INSCRIPCIONES WHERE id_evento = :id", nativeQuery = true)
+        void deleteByEventoId(@Param("id") Integer id);
+
+        @Modifying
+        @Transactional
+        @Query(value = "DELETE FROM INSCRIPCIONES WHERE id_usuario = :id", nativeQuery = true)
+        void deleteByUsuarioId(@Param("id") Integer id);
 }

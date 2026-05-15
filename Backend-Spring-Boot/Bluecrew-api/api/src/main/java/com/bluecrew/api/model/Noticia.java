@@ -55,8 +55,8 @@ public class Noticia implements Serializable {
     private String imagen;
 
     @Schema(description = "Descripción de la noticia", example = "Descripción de la noticia")
-    @Size(max = 500, message = "La descripción no puede tener más de 500 caracteres")
-    @Column(name = "descripcion", nullable = false, unique = false)
+    @Size(max = 3000, message = "La descripción no puede tener más de 3000 caracteres")
+    @Column(name = "descripcion", nullable = true, unique = false, length = 3000)
     private String descripcion;
 
     @Schema(description = "Estado de aprobación de la noticia", example = "PENDIENTE")

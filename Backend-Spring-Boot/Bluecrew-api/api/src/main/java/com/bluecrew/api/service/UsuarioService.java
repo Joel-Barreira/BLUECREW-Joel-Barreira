@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bluecrew.api.model.Usuario;
 import com.bluecrew.api.repository.UsuarioRepository;
+import com.bluecrew.api.repository.InscripcionesRepository;
+import com.bluecrew.api.repository.CalificacionRepository;
+import com.bluecrew.api.repository.EventoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +19,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UsuarioService {
     @Autowired
     public UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private InscripcionesRepository inscripcionesRepository;
+
+    @Autowired
+    private CalificacionRepository calificacionRepository;
+
+    @Autowired
+    private EventoRepository eventoRepository;
 
 
    
@@ -88,6 +100,9 @@ public class UsuarioService {
     
     @Transactional
     public void deleteById(int id) {
+        eventoRepository.setUsuarioToNull(id);
+        calificacionRepository.deleteByUsuarioId(id);
+        inscripcionesRepository.deleteByUsuarioId(id);
         usuarioRepository.deleteById(id);
     }    
 }

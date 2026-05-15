@@ -5,6 +5,8 @@ import com.bluecrew.api.model.RecoleccionResiduos;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,4 +21,8 @@ public interface RecoleccionResiduosRepository extends JpaRepository<Recoleccion
     @Query(value = "SELECT SUM(CANTIDAD_RECOLECTADA) FROM RECOLECCION_RESIDUOS", nativeQuery = true)
     Long findSqlSum();
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM RECOLECCION_RESIDUOS WHERE id_evento = :id", nativeQuery = true)
+    void deleteByEventoId(@Param("id") Integer id);
 }

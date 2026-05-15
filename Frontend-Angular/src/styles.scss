@@ -1,0 +1,256 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+// 1. Override Bootstrap variables
+$primary:   hsl(180, 79%, 43%); 
+$secondary: hsl(180, 76%, 24%); 
+$success:   hsl(90,  66%, 47%);
+$danger:    hsl(0,   84%, 49%);
+$warning:   hsl(62, 91%, 46%);  
+$info:      hsl(39,  89%, 53%); 
+
+$body-bg:    hsl(29, 29%, 96%);  
+$body-color: hsl(0,   0%, 26%); 
+
+$font-family-sans-serif: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+
+// 2. Import Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// 3. Custom Global Styles & Variables
+:root {
+  --brand-primary: #{$primary};
+  --brand-secondary: #{$secondary};
+  --brand-accent: #{$info};
+  
+  --bg-soft-sand:   hsl(30, 24%, 96%);
+  --text-warm-grey: hsl(0,   0%, 26%);
+  
+  /* Glassmorphism for Light Theme */
+  --glass-backdrop: blur(12px);
+  --glass-bg:       hsla(0, 0%, 100%, 0.7);
+  --glass-border:   hsla(0, 0%, 100%, 0.3);
+  --glass-shadow:   0 8px 32px 0 hsla(231, 63%, 33%, 0.1);
+}
+
+body {
+  font-family: $font-family-sans-serif;
+  background-color: $body-bg;
+  color: $body-color;
+  min-height: 100vh;
+  // Subtle gradient background
+  background-image: 
+    radial-gradient(circle at 0% 0%,   hsla(180, 79%, 43%, 0.05), transparent 40%),
+    radial-gradient(circle at 100% 100%, hsla(40, 88%, 53%, 0.05), transparent 40%);
+}
+
+/* Premium Utilities */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--glass-shadow);
+}
+
+.card-premium {
+  border: none;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(14, 108, 108, 0.2);
+  border-radius: 10px;
+  
+  &:hover {
+    background: rgba(14, 108, 108, 0.4);
+  }
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--brand-secondary);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+  .glass-panel {
+    padding: 1.5rem !important;
+    border-radius: 16px;
+  }
+  
+  .card-premium {
+    padding: 1.25rem !important;
+  }
+
+  .h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Table Responsive Tweaks */
+.table-responsive {
+  border-radius: 12px;
+  
+  .table {
+    margin-bottom: 0;
+    
+    th, td {
+      padding: 1rem 1.25rem;
+      
+      &:first-child { 
+        padding-left: 1.5rem; 
+      }
+      
+      &:last-child { 
+        padding-right: 1.5rem; 
+      }
+    }
+    
+    th {
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    // Standardized widths for consistency across CRUDs
+    .col-status { width: 140px; }
+    .col-role { width: 120px; }
+    .col-date { width: 150px; }
+    .col-actions { width: 100px; text-align: right; }
+  }
+}
+
+/* Global Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 50rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: white !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.search-input-field {
+  padding-left: 4.5rem !important;
+}
+
+.search-icon-inner {
+  left: 1.25rem !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+  .glass-panel {
+    padding: 1rem !important;
+  }
+
+  .status-badge {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.6rem;
+    letter-spacing: 0;
+  }
+
+  .table-responsive {
+    .table {
+      font-size: 0.85rem;
+      
+      th, td {
+        padding: 0.6rem 0.4rem !important;
+        
+        &:first-child { padding-left: 0.5rem !important; }
+        &:last-child { padding-right: 0.5rem !important; }
+      }
+
+      .col-actions { width: 80px !important; }
+      .col-status { width: 100px !important; }
+      .col-role { width: 90px !important; }
+    }
+  }
+
+  .user-avatar-sm {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .search-input-field {
+    padding-left: 3.8rem !important;
+    font-size: 0.85rem;
+  }
+  
+  .search-icon-inner {
+    width: 16px !important;
+    height: 16px !important;
+    left: 1rem !important;
+  }
+}
+
+/* Modal Responsive Tweaks */
+@media (max-width: 575.98px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  .modal-content {
+    border-radius: 20px;
+  }
+  
+  .modal-body {
+    padding: 1.25rem !important;
+  }
+}
+
+/* Search Box Focus Highlight */
+.search-box input.form-control:focus {
+  background-color: white !important;
+  border: 1.5px solid var(--brand-primary) !important;
+  box-shadow: 0 0 0 4px hsla(180, 79%, 43%, 0.15) !important;
+  outline: none;
+}

@@ -2,6 +2,8 @@ package com.bluecrew.api.repository;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -94,4 +96,9 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
                         "AND e.FINALIZADO = false " +
                         "AND e.ESTADO = 'APROBADO'", nativeQuery = true)
         List<Object[]> findEventosPublicadosByOng(@Param("idOng") int idOng);
+
+        @Modifying
+        @Transactional
+        @Query(value = "UPDATE eventos SET id_user = NULL WHERE id_user = :id", nativeQuery = true)
+        void setUsuarioToNull(@Param("id") Integer id);
 }

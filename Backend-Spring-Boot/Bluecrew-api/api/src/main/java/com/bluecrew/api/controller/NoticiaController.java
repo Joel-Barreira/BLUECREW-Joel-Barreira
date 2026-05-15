@@ -15,11 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
@@ -193,6 +195,59 @@ public class NoticiaController {
         return response;
     }
     
+    @Operation(summary = "Cambiar visibilidad de una noticia", description = "Cambia el estado de visibilidad (PUBLICADA/BORRADOR)")
+    @PatchMapping("/noticias/{id}/visibilidad")
+    public ResponseEntity<Map<String, Object>> updateVisibilidad(
+            @PathVariable int id,
+            @RequestParam boolean estado) {
+        
+        Noticia existingObj = noticiaService.findById(id);
+        if (existingObj == null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("error", "Noticia no encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+        }
+        
+        existingObj.setEstadoVisibilidad(estado);
+        noticiaService.save(existingObj);
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("mensaje", "Visibilidad actualizada con éxito");
+        map.put("nuevoEstado", estado);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+    @Operation(summary = "Cambiar estado de aprobación de una noticia", description = "Cambia el estado de aprobación (PENDIENTE/APROBADO/RECHAZADO)")
+    @PatchMapping("/noticias/{id}/estado")
+    public ResponseEntity<Map<String, Object>> updateEstado(
+            @PathVariable int id,
+            @RequestParam String estado) {
+
+        Noticia existingObj = noticiaService.findById(id);
+        if (existingObj == null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("error", "Noticia no encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+        }
+
+        try {
+            com.bluecrew.api.model.EstadoAprobacionNoticia nuevoEstado =
+                    com.bluecrew.api.model.EstadoAprobacionNoticia.valueOf(estado.toUpperCase());
+            existingObj.setEstadoAprobacionNoticia(nuevoEstado);
+            noticiaService.save(existingObj);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("mensaje", "Estado de aprobación actualizado con éxito");
+            map.put("nuevoEstado", nuevoEstado);
+            return ResponseEntity.status(HttpStatus.OK).body(map);
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("error", "Estado no válido. Valores permitidos: PENDIENTE, APROBADO, RECHAZADO");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
+        }
+    }
+
     // ****************************************************************************
     // DELETE
     // http://localhost:8080/api/noticias/16

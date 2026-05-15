@@ -8,11 +8,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bluecrew.api.model.Evento;
 import com.bluecrew.api.repository.EventoRepository;
+import com.bluecrew.api.repository.InscripcionesRepository;
+import com.bluecrew.api.repository.CalificacionRepository;
+import com.bluecrew.api.repository.RecoleccionResiduosRepository;
 
 @Service
 public class EventoService {
     @Autowired
     public EventoRepository eventoRepository;
+
+    @Autowired
+    private InscripcionesRepository inscripcionesRepository;
+
+    @Autowired
+    private CalificacionRepository calificacionRepository;
+
+    @Autowired
+    private RecoleccionResiduosRepository recoleccionResiduosRepository;
 
     // ************************
     // CONSULTAS
@@ -100,6 +112,9 @@ public class EventoService {
 
     @Transactional
     public void deleteById(int id) {
+        recoleccionResiduosRepository.deleteByEventoId(id);
+        calificacionRepository.deleteByEventoId(id);
+        inscripcionesRepository.deleteByEventoId(id);
         eventoRepository.deleteById(id);
     }
 }

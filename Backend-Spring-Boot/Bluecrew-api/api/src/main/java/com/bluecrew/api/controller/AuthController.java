@@ -97,6 +97,7 @@ public class AuthController {
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Login realizado con éxito");
             map.put("user", userDetails.getUsername());
+            map.put("nombre", usuario.getNombre());
             map.put("roles", userDetails.getAuthorities().toString());
             map.put("id", usuario.getId());
 

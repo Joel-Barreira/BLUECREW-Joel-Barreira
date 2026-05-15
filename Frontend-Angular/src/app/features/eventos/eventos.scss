@@ -1,0 +1,51 @@
+@use '../usuarios/usuarios.scss';
+
+.event-title {
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.event-location {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.event-date {
+  font-weight: 500;
+}
+
+.event-date-end {
+  font-size: 0.8rem;
+}
+
+.btn-action.success:hover {
+  color: var(--success-color);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.btn-action.danger:hover {
+  color: var(--danger-color);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-action.warning:hover {
+  color: var(--warning-color);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.btn-approve:hover lucide-icon {
+  color: white !important;
+}
+
+.btn-approve:hover svg {
+  stroke: white !important;
+}
+
+.description-area {
+  max-height: 300px;
+  
+  @media (max-width: 575.98px) {
+    max-height: 180px;
+  }
+}

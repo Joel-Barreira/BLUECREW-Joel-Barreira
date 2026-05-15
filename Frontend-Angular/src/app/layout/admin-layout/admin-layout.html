@@ -1,0 +1,80 @@
+<div class="admin-container">
+  <!-- Mobile Backdrop -->
+  <div class="sidebar-backdrop" [class.show]="isSidebarOpen" (click)="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar shadow-lg" [class.open]="isSidebarOpen">
+    <div class="sidebar-header pt-5 pb-4">
+      <div class="logo">
+        <span class="logo-text text-uppercase fw-bold text-white">
+          BlueCrew
+        </span>
+      </div>
+      <!-- Mobile Close Button -->
+      <button class="btn-close-sidebar d-lg-none" (click)="closeSidebar()">
+        <lucide-icon [img]="X" size="24"></lucide-icon>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav mt-3">
+      <a routerLink="/estadisticas" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <lucide-icon [img]="LayoutDashboard" size="20"></lucide-icon>
+        <span>Estadísticas</span>
+      </a>
+      <a routerLink="/usuarios" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <lucide-icon [img]="Users" size="20"></lucide-icon>
+        <span>Usuarios</span>
+      </a>
+      <a routerLink="/eventos" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <lucide-icon [img]="CalendarDays" size="20"></lucide-icon>
+        <span>Eventos</span>
+      </a>
+      <a routerLink="/noticias" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <lucide-icon [img]="Newspaper" size="20"></lucide-icon>
+        <span>Noticias</span>
+      </a>
+      <a routerLink="/contacto" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+        <lucide-icon [img]="MessageSquare" size="20"></lucide-icon>
+        <span>Mensajes</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer mt-auto border-0">
+      <div class="admin-profile p-3 mb-3 mx-2">
+        <div class="avatar shadow-sm">
+          {{ (currentUser?.nombre || currentUser?.username || 'A').charAt(0).toUpperCase() }}
+        </div>
+        <div class="info ms-3">
+          <span class="name text-white">{{ currentUser?.nombre || currentUser?.username || 'Admin' }}</span>
+          <span class="role small text-white-50">{{ currentUser?.roles?.includes('ADMIN') ? 'Administrador' : 'Usuario' }}</span>
+        </div>
+        <button class="logout-btn ms-auto" (click)="logout()" title="Cerrar Sesión">
+          <lucide-icon [img]="LogOut" size="18"></lucide-icon>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="top-header border-0 shadow-sm px-4 px-lg-5">
+      <div class="header-left d-flex align-items-center gap-3">
+        <button class="btn-toggle-sidebar d-lg-none" (click)="toggleSidebar()">
+          <lucide-icon [img]="Menu" size="24"></lucide-icon>
+        </button>
+        <h4 class="mb-0 text-secondary fw-bold d-none d-sm-block">Panel de Administración</h4>
+        <h4 class="mb-0 text-secondary fw-bold d-sm-none">Admin</h4>
+      </div>
+      <div class="header-right">
+        <!-- Optional profile info or search in header -->
+      </div>
+    </header>
+
+    <div class="content-area bg-light px-3 px-lg-5 py-4 py-lg-5">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+  
+  <app-chatbot></app-chatbot>
+</div>
+

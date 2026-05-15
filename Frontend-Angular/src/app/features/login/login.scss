@@ -1,0 +1,71 @@
+.login-wrapper {
+  min-height: 100vh;
+  background-color: var(--bg-soft-sand);
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-radius: 32px;
+  z-index: 10;
+  animation: loginAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes loginAppear {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: -1px;
+}
+
+/* Ambient Lights */
+.ambient-light {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 1;
+  opacity: 0.3;
+  animation: float 15s ease-in-out infinite;
+}
+
+.light-1 {
+  background: var(--brand-primary);
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  right: -50px;
+}
+
+.light-2 {
+  background: var(--brand-secondary);
+  width: 500px;
+  height: 500px;
+  bottom: -150px;
+  left: -100px;
+  animation-delay: -7s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, -30px) scale(1.1); }
+  66% { transform: translate(-30px, 40px) scale(0.9); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .login-container {
+    padding: 32px !important;
+  }
+  .logo-text {
+    font-size: 2rem;
+  }
+}
+

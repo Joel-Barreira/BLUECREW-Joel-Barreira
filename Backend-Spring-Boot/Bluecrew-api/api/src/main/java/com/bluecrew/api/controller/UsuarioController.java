@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,7 +73,8 @@ public class UsuarioController {
         map.put("foto", usuario.getFoto());
         map.put("localidad", usuario.getLocalidad());
         map.put("rol", usuario.getRol());
-
+        map.put("activo", usuario.getActivo());
+        map.put("crearEvento", usuario.getCrearEvento());
         map.put("eventosCompletados", usuario.getEventosCompletados());
 
         return ResponseEntity.status(HttpStatus.OK).body(map);
@@ -255,6 +258,15 @@ public class UsuarioController {
             if (userUpdate.getRol() != null) {
                 existingUser.setRol(userUpdate.getRol());
             }
+            if (userUpdate.getActivo() != null) {
+                existingUser.setActivo(userUpdate.getActivo());
+            }
+            if (userUpdate.getCrearEvento() != null) {
+                existingUser.setCrearEvento(userUpdate.getCrearEvento());
+            }
+            if (userUpdate.getEventosCompletados() != null) {
+                existingUser.setEventosCompletados(userUpdate.getEventosCompletados());
+            }
 
             if (userUpdate.getPassword_hash() != null && !userUpdate.getPassword_hash().trim().isEmpty()) {
                 existingUser.setPassword_hash(passwordEncoder.encode(userUpdate.getPassword_hash()));
@@ -291,6 +303,33 @@ public class UsuarioController {
         map.put("mensaje", "Usuario eliminado con éxito");
         map.put("idEliminado", id);
 
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+    // ****************************************************************************
+    // CAMBIAR ESTADO ACTIVO (PATCH)
+    // http://localhost:8080/api/usuarios/{id}/activo?activo=false
+    @Operation(summary = "Cambiar estado activo de un usuario", description = "Activa o desactiva un usuario sin modificar el resto de sus datos")
+    @PatchMapping("/{id}/activo")
+    public ResponseEntity<Map<String, Object>> updateActivo(
+            @PathVariable int id,
+            @RequestParam boolean activo) {
+
+        Usuario existingUser = usuarioService.findById(id);
+        if (existingUser == null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("error", "Usuario no encontrado");
+            map.put("id", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+        }
+
+        existingUser.setActivo(activo);
+        usuarioRepository.save(existingUser);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("mensaje", "Estado activo actualizado con éxito");
+        map.put("id", id);
+        map.put("activo", activo);
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 }

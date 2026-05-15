@@ -7,14 +7,19 @@ services:
       - app-network
     volumes:
       - uploads_volume:/app/uploads
+    restart: always
+
 
   frontend:
-    build: ./Frontend-React
-    container_name: react-web
-    depends_on:
-      - backend
+    build: 
+      context: ./Frontend-Angular
+    container_name: angular-web
     networks:
       - app-network
+    restart: always
+    depends_on:
+      - backend
+
 
   nginx-proxy:
     image: nginx:alpine
@@ -29,6 +34,7 @@ services:
       - backend
     networks:
       - app-network
+    restart: always
 
 networks:
   app-network:

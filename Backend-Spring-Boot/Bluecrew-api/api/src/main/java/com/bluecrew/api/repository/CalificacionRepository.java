@@ -5,6 +5,8 @@ import com.bluecrew.api.model.CalificacionId;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -21,4 +23,14 @@ public interface CalificacionRepository extends JpaRepository<Calificacion, Cali
 
     @Query(value = "SELECT * FROM calificaciones WHERE id_evento = :eventoId", nativeQuery = true)
     List<Calificacion> findSqlByEventoId(@Param("eventoId") Long eventoId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM calificaciones WHERE id_evento = :id", nativeQuery = true)
+    void deleteByEventoId(@Param("id") Integer id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM calificaciones WHERE id_usuario = :id", nativeQuery = true)
+    void deleteByUsuarioId(@Param("id") Integer id);
 }
